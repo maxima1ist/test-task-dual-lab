@@ -1,6 +1,7 @@
 # test-task-dual-lab
 Programming Test: Bus Stop
 
-Just run from console run.sh file!
+File "install.sh" for installation. Then "timetable.out" for execution.<br>
+Or just "./run.sh" from your comand line.
 
 Tested on Linux ubuntu 20.04.
