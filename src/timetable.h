@@ -29,6 +29,8 @@ namespace timetable {
         bool operator<=(const Time&) const noexcept;
         bool operator>=(const Time&) const noexcept;
 
+        int16_t getTotalInMinutes() const noexcept;
+
         static string digitToTimeStr(int16_t);
 
         friend istream& operator>>(istream&, Time&);
@@ -44,6 +46,8 @@ namespace timetable {
         explicit TransportService(const Time&, const Time&) noexcept;
 
         bool operator<(const TransportService&) const noexcept;
+        
+        int16_t getDurationInMinutes() const noexcept;
 
         bool isTheSameRange(const TransportService&) const noexcept;
         bool isInsideOfRange(const TransportService&) const noexcept;

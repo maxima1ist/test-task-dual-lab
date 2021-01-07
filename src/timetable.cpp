@@ -39,6 +39,10 @@ namespace timetable {
         return !(*this < other);
     }
 
+    int16_t Time::getTotalInMinutes() const noexcept {
+        return hour * 60 + minute;
+    }
+
     string Time::digitToTimeStr(int16_t digit) {
         if (digit < 0 || digit >= 100) {
             throw TimeFormatException();
@@ -74,12 +78,16 @@ namespace timetable {
         }
     }
 
+    int16_t TransportService::getDurationInMinutes() const noexcept {
+        return finish.getTotalInMinutes() - start.getTotalInMinutes();
+    }
+
     bool TransportService::isTheSameRange(const TransportService& other) const noexcept {
         return start == other.start && finish == other.finish;
     }
 
     bool TransportService::isInsideOfRange(const TransportService& other) const noexcept {
-        return start <= other.start && other.finish <= finish;
+        return other.start <= start && finish <= other.finish;
     }
 
     istream& operator>>(istream& in, TransportService& transportService) {
