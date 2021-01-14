@@ -67,19 +67,28 @@ namespace timetable {
     //Time
 
     //TransportService
-    TransportService::TransportService() noexcept: start(), finish() {}
-    TransportService::TransportService(const Time& start, const Time& finish) noexcept: start(start), finish(finish) {}
+    TransportService::TransportService() noexcept: start(), finish(), inMidnight(false) {}
+    TransportService::TransportService(const Time& start, const Time& finish) noexcept:
+        start(start), finish(finish), inMidnight(start > finish) {}
 
     bool TransportService::operator<(const TransportService& other) const noexcept {
         if (start == other.start) {
-            return finish < other.finish;
+            if (inMidnight != other.inMidnight) {
+                return !inMidnight;
+            } else {
+                return finish < other.finish;
+            }
         } else {
             return start < other.start;
         }
     }
 
     int16_t TransportService::getDurationInMinutes() const noexcept {
-        return finish.getTotalInMinutes() - start.getTotalInMinutes();
+        if (inMidnight) {
+            return TOTAL_MINUTES_IN_DAY - (start.getTotalInMinutes() - finish.getTotalInMinutes());
+        } else {
+            return finish.getTotalInMinutes() - start.getTotalInMinutes();
+        }
     }
 
     bool TransportService::isTheSameRange(const TransportService& other) const noexcept {
@@ -87,11 +96,24 @@ namespace timetable {
     }
 
     bool TransportService::isInsideOfRange(const TransportService& other) const noexcept {
-        return other.start <= start && finish <= other.finish;
+        if (inMidnight != other.inMidnight) {
+            if (inMidnight) {
+                return false;
+            } else {
+                if (other.start <= start) {
+                    return true;
+                } else {
+                    return finish <= other.finish;
+                }
+            }
+        } else {
+            return other.start <= start && finish <= other.finish;
+        }
     }
 
     istream& operator>>(istream& in, TransportService& transportService) {
         in >> transportService.start >> transportService.finish;
+        transportService.inMidnight = transportService.start > transportService.finish;
         return in;
     }
 

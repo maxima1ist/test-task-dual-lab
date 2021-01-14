@@ -40,13 +40,16 @@ namespace timetable {
     class TransportService {
     private:
         Time start, finish;
+        bool inMidnight;
 
     public:
+        const int16_t TOTAL_MINUTES_IN_DAY = 24 * 60;
+
         TransportService() noexcept;
         explicit TransportService(const Time&, const Time&) noexcept;
 
         bool operator<(const TransportService&) const noexcept;
-        
+
         int16_t getDurationInMinutes() const noexcept;
 
         bool isTheSameRange(const TransportService&) const noexcept;
